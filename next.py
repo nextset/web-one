@@ -1,19 +1,29 @@
-from flask import Flask
+from flask import Flask, render_template, redirect, url_for, request, flash
+
 app = Flask(__name__)
 
-@app.route('/')
+
 def pw():
     import random
-    pas1 = list('1234567890')
-    pas2 = list('ABCDEFGHIGKLMNOPQRSTUVYXWZ')
-    pas3 = list('abcdefghigklmnopqrstuvyxwz')
-    random.shuffle(pas1)
+    pas2 = list('ABCDEFGHIGKLMNopqrstuvyxwz123456')
+    pas3 = list('abcdefghigklmnOPQRSTUVYXWZ7890')
     random.shuffle(pas2)
     random.shuffle(pas3)
-    passwd = ''.join([random.choice(pas1) for x in range(4)] + [random.choice(pas2) for x in range(1)] + [random.choice(pas3) for x
-                                                                                             in range(1)])
+    passwd = 'WN_' + ''.join([random.choice(pas2) for x in range(11)] + [random.choice(pas3) for x in range(11)])
     return passwd
 
 
+@app.route('/', methods=['GET', 'POST'])
+def main():
+    return render_template('main.html')
+
+
+@app.route('/add', methods=['GET', 'POST'])
+def add():
+    a = [pw() for x in range(85)]
+
+    return render_template('index.html', a=a)
+
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host='0.0.0.0')
